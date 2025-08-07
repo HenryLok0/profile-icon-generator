@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Abstract Avatar Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Creative Abstract Avatar Generator</h1>
+        <p>Enter your name or username to generate a unique, abstract avatar.</p>
+        <input type="text" id="nameInput" placeholder="Enter your name...">
+        <div id="avatarCanvasContainer" class="canvas-container"></div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="styleSelector">Style:</label>
+                <select id="styleSelector">
+                    <option value="organic" selected>Organic</option>
+                    <option value="geometric">Geometric</option>
+                    <option value="cosmic">Cosmic</option>
+                </select>
+            </div>
+            <button id="changePaletteBtn">Change Palette</button>
+            <label class="checkbox-label">
+                <input type="checkbox" id="includeInitials" checked>
+                Include Initials
+            </label>
+        </div>
+        <button id="downloadBtn">Download Avatar</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

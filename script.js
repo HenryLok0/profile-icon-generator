@@ -46,6 +46,10 @@ let sketch = function(p) {
             drawGeometric(p, palette);
         } else if (currentStyle === 'cosmic') {
             drawCosmic(p, palette);
+        } else if (currentStyle === 'circuit') {
+            drawCircuit(p, palette);
+        } else if (currentStyle === 'burst') {
+            drawBurst(p, palette);
         } else {
             drawOrganic(p, palette);
         }
@@ -192,6 +196,61 @@ let sketch = function(p) {
             link.download = `${nameInput.value || 'avatar'}-${styleSelector.value}-icon.png`;
             link.href = p5Canvas.toDataURL('image/png');
             link.click();
+        }
+    }
+
+    function drawCircuit(p, palette) {
+        // Circuit board style: lines and nodes
+        p.background(p.random(palette));
+        let nodeCount = p.floor(p.random(8, 16));
+        let nodes = [];
+        for (let i = 0; i < nodeCount; i++) {
+            let angle = p.random(p.TWO_PI);
+            let radius = p.random(60, 120);
+            let x = p.width / 2 + Math.cos(angle) * radius;
+            let y = p.height / 2 + Math.sin(angle) * radius;
+            nodes.push({x, y});
+        }
+        // Draw connections
+        p.strokeWeight(2);
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                if (p.random() < 0.25) {
+                    p.stroke(p.random(palette));
+                    p.line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+                }
+            }
+        }
+        // Draw nodes
+        for (let node of nodes) {
+            p.fill(p.random(palette));
+            p.stroke(255);
+            p.ellipse(node.x, node.y, p.random(8, 16));
+        }
+    }
+
+    function drawBurst(p, palette) {
+        // Burst style: radiating lines from center
+        let bgColor = p.random(palette);
+        p.background(bgColor);
+        let burstCount = p.floor(p.random(16, 32));
+        let centerX = p.width / 2;
+        let centerY = p.height / 2;
+        let maxLen = p.width / 2 * p.random(0.8, 1.1);
+        p.strokeWeight(p.random(2, 5));
+        for (let i = 0; i < burstCount; i++) {
+            let angle = p.map(i, 0, burstCount, 0, p.TWO_PI) + p.random(-0.1, 0.1);
+            let len = maxLen * p.random(0.7, 1.0);
+            p.stroke(p.random(palette));
+            p.line(centerX, centerY, centerX + Math.cos(angle) * len, centerY + Math.sin(angle) * len);
+        }
+        // Add burst dots
+        for (let i = 0; i < burstCount; i++) {
+            let angle = p.map(i, 0, burstCount, 0, p.TWO_PI) + p.random(-0.1, 0.1);
+            let len = maxLen * p.random(0.7, 1.0);
+            p.fill(p.random(palette));
+            p.noStroke();
+            p.ellipse(centerX + Math.cos(angle) * len, centerY + Math.sin(angle) * len, p.random(8, 16));
         }
     }
 };

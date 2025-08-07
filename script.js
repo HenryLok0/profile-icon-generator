@@ -10,7 +10,10 @@ const palettes = [
     ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500'],
     ['#390099', '#9e0059', '#ff0054', '#ff5400', '#ffbd00'],
     ['#2d00f7', '#6a00f4', '#a100f2', '#b100e8', '#bc00dd'],
-    ['#006466', '#065a60', '#0b525b', '#144552', '#1b3a4b', '#212f45', '#272640', '#312244', '#3e1f47', '#4d194d']
+    ['#006466', '#065a60', '#0b525b', '#144552', '#1b3a4b', '#212f45', '#272640', '#312244', '#3e1f47', '#4d194d'],
+    ['#0d47a1', '#1976d2', '#42a5f5', '#90caf9', '#e3f2fd'], // Blueprint palette
+    ['#5d4037', '#795548', '#a1887f', '#d7ccc8', '#efebe9'], // Strata palette
+    ['#212121', '#424242', '#616161', '#9e9e9e', '#eeeeee']  // Weave palette
 ];
 let currentPaletteIndex = 0;
 
@@ -50,7 +53,13 @@ let sketch = function(p) {
             drawCircuit(p, palette);
         } else if (currentStyle === 'burst') {
             drawBurst(p, palette);
-        } else {
+        } else if (currentStyle === 'blueprint') {
+            drawBlueprint(p, palette);
+        } else if (currentStyle === 'strata') {
+            drawStrata(p, palette);
+        } else if (currentStyle === 'weave') {
+            drawWeave(p, palette);
+        } else { // 'organic' is the default
             drawOrganic(p, palette);
         }
 
@@ -251,6 +260,68 @@ let sketch = function(p) {
             p.fill(p.random(palette));
             p.noStroke();
             p.ellipse(centerX + Math.cos(angle) * len, centerY + Math.sin(angle) * len, p.random(8, 16));
+        }
+    }
+
+    function drawBlueprint(p, palette) {
+        // Blueprint style: grid lines and schematic shapes
+        p.background(palette[4]); // Lightest color for background
+        p.stroke(palette[0]); // Darkest color for lines
+        p.strokeWeight(1);
+
+        // Draw grid
+        for (let i = 0; i < p.width; i += 20) {
+            p.line(i, 0, i, p.height);
+            p.line(0, i, p.width, i);
+        }
+
+        // Draw some schematic circles
+        p.noFill();
+        p.strokeWeight(2);
+        for (let i = 0; i < p.floor(p.random(3, 6)); i++) {
+            p.stroke(p.random(palette.slice(0, 4)));
+            let x = p.random(p.width);
+            let y = p.random(p.height);
+            let r = p.random(20, 80);
+            p.ellipse(x, y, r, r);
+        }
+    }
+
+    function drawStrata(p, palette) {
+        // Strata style: layered, earthy look
+        p.noStroke();
+        let y = 0;
+        while (y < p.height) {
+            let layerHeight = p.random(10, 40);
+            p.fill(p.random(palette));
+            p.rect(0, y, p.width, layerHeight);
+            y += layerHeight;
+        }
+
+        // Add some texture
+        for (let i = 0; i < 5000; i++) {
+            let x = p.random(p.width);
+            let y = p.random(p.height);
+            let c = p.get(x, y);
+            p.stroke(p.red(c) * 0.9, p.green(c) * 0.9, p.blue(c) * 0.9, 50);
+            p.point(x, y);
+        }
+    }
+
+    function drawWeave(p, palette) {
+        // Weave style: interlocking lines
+        p.background(palette[4]);
+        p.strokeWeight(p.random(4, 8));
+
+        // Horizontal lines
+        for (let y = 0; y < p.height; y += 20) {
+            p.stroke(p.random(palette.slice(0, 4)));
+            p.line(0, y, p.width, y);
+        }
+        // Vertical lines
+        for (let x = 0; x < p.width; x += 20) {
+            p.stroke(p.random(palette.slice(0, 4)));
+            p.line(x, 0, x, p.height);
         }
     }
 };

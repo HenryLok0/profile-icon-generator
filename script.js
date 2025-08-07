@@ -44,7 +44,6 @@ let sketch = function(p) {
         let currentStyle = styleSelector.value;
         let palette = palettes[currentPaletteIndex];
 
-        // Call the appropriate drawing function based on style
         if (currentStyle === 'geometric') {
             drawGeometric(p, palette);
         } else if (currentStyle === 'cosmic') {
@@ -59,13 +58,60 @@ let sketch = function(p) {
             drawStrata(p, palette);
         } else if (currentStyle === 'weave') {
             drawWeave(p, palette);
-        } else { // 'organic' is the default
+        } else if (currentStyle === 'minimalist') {
+            drawMinimalist(p, palette);
+        } else if (currentStyle === 'monogram') {
+            drawMonogram(p, palette);
+        } else if (currentStyle === 'gradientring') {
+            drawGradientRing(p, palette);
+        } else if (currentStyle === 'techgrid') {
+            drawTechGrid(p, palette);
+        } else if (currentStyle === 'softshadow') {
+            drawSoftShadow(p, palette);
+        } else if (currentStyle === 'abstractblocks') {
+            drawAbstractBlocks(p, palette);
+        } else if (currentStyle === 'signature') {
+            drawSignature(p, palette);
+        } else {
             drawOrganic(p, palette);
         }
 
-        // Add initials if checked
-        if (includeInitialsCheckbox.checked && name !== 'default' && name.trim().length > 0) {
+        if (includeInitialsCheckbox.checked && name !== 'default' && name.trim().length > 0 && !['monogram','signature'].includes(currentStyle)) {
             drawInitials(p, name);
+        }
+    };
+
+    p.drawStylePreview = function(style, palette) {
+        if (style === 'geometric') {
+            drawGeometric(p, palette);
+        } else if (style === 'cosmic') {
+            drawCosmic(p, palette);
+        } else if (style === 'circuit') {
+            drawCircuit(p, palette);
+        } else if (style === 'burst') {
+            drawBurst(p, palette);
+        } else if (style === 'blueprint') {
+            drawBlueprint(p, palette);
+        } else if (style === 'strata') {
+            drawStrata(p, palette);
+        } else if (style === 'weave') {
+            drawWeave(p, palette);
+        } else if (style === 'minimalist') {
+            drawMinimalist(p, palette);
+        } else if (style === 'monogram') {
+            drawMonogram(p, palette);
+        } else if (style === 'gradientring') {
+            drawGradientRing(p, palette);
+        } else if (style === 'techgrid') {
+            drawTechGrid(p, palette);
+        } else if (style === 'softshadow') {
+            drawSoftShadow(p, palette);
+        } else if (style === 'abstractblocks') {
+            drawAbstractBlocks(p, palette);
+        } else if (style === 'signature') {
+            drawSignature(p, palette);
+        } else {
+            drawOrganic(p, palette);
         }
     };
 
@@ -323,6 +369,119 @@ let sketch = function(p) {
             p.stroke(p.random(palette.slice(0, 4)));
             p.line(x, 0, x, p.height);
         }
+    }
+
+    function drawMinimalist(p, palette) {
+        // 極簡主義：柔和背景+簡單線條
+        p.background(palette[3]);
+        p.noFill();
+        p.stroke(palette[0]);
+        p.strokeWeight(4);
+        // 幾條平行線
+        for (let i = 1; i <= 3; i++) {
+            p.line(40 * i, 40, 40 * i, 160);
+        }
+        // 幾個圓形色塊
+        p.noStroke();
+        p.fill(palette[1]);
+        p.ellipse(60, 60, 40, 40);
+        p.fill(palette[2]);
+        p.ellipse(140, 140, 30, 30);
+    }
+
+    function drawMonogram(p, palette) {
+        // Monogram：大字母+幾何背景，顏色和位置隨名字隨機
+        p.background(palette[4]);
+        p.noStroke();
+        // 幾何色塊（隨機顏色與位置）
+        let seed = getSeed(nameInput.value || 'A');
+        p.randomSeed(seed);
+        p.fill(p.random(palette));
+        p.rect(p.random(10, 60), p.random(10, 80), p.random(100, 160), p.random(40, 80), 20);
+        p.fill(p.random(palette));
+        p.ellipse(p.random(60, 140), p.random(100, 180), p.random(60, 100), p.random(30, 60));
+        // 大寫字母
+        let initials = getInitials(nameInput.value || 'A');
+        p.textAlign(p.CENTER, p.CENTER);
+        p.textSize(100);
+        p.textFont('Montserrat');
+        p.fill(p.random(palette));
+        p.text(initials, p.width / 2, p.height / 2);
+    }
+
+    function drawGradientRing(p, palette) {
+        // 漸層圓環，現代感
+        p.background(palette[3]);
+        p.noFill();
+        for (let r = 80; r > 30; r -= 8) {
+            let c = p.lerpColor(p.color(palette[0]), p.color(palette[2]), (r-30)/50);
+            p.stroke(c);
+            p.strokeWeight(8);
+            p.ellipse(p.width/2, p.height/2, r*2, r*2);
+        }
+    }
+
+    function drawTechGrid(p, palette) {
+        // 科技感網格
+        p.background(palette[4]);
+        p.stroke(palette[0]);
+        p.strokeWeight(2);
+        for (let x = 30; x < p.width; x += 30) {
+            p.line(x, 0, x, p.height);
+        }
+        for (let y = 30; y < p.height; y += 30) {
+            p.line(0, y, p.width, y);
+        }
+        // 點陣
+        p.noStroke();
+        for (let i = 0; i < 20; i++) {
+            p.fill(p.random(palette));
+            p.ellipse(p.random(p.width), p.random(p.height), p.random(6, 14));
+        }
+    }
+
+    function drawSoftShadow(p, palette) {
+        // 柔和陰影
+        p.background(palette[2]);
+        p.noStroke();
+        for (let i = 0; i < 3; i++) {
+            p.fill(palette[i], 80);
+            p.ellipse(128 + i*10, 128 + i*10, 120 - i*20, 120 - i*20);
+        }
+        p.fill(palette[0]);
+        p.ellipse(128, 128, 80, 80);
+    }
+
+    function drawAbstractBlocks(p, palette) {
+        // 抽象色塊
+        p.background(palette[4]);
+        for (let i = 0; i < 5; i++) {
+            p.fill(p.random(palette));
+            p.rect(p.random(20, 180), p.random(20, 180), p.random(30, 60), p.random(20, 50), 10);
+        }
+    }
+
+    function drawSignature(p, palette) {
+        // 仿手寫簽名
+        p.background(palette[3]);
+        p.stroke(palette[0]);
+        p.strokeWeight(4);
+        p.noFill();
+        p.beginShape();
+        let seed = getSeed(nameInput.value || 'A');
+        p.randomSeed(seed);
+        for (let x = 40; x < 200; x += 20) {
+            let y = 120 + p.random(-30, 30);
+            p.curveVertex(x, y);
+        }
+        p.endShape();
+        // 加上名字首字母
+        let initials = getInitials(nameInput.value || 'A');
+        p.textAlign(p.RIGHT, p.BOTTOM);
+        p.textSize(40);
+        p.textFont('Montserrat');
+        p.fill(palette[1]);
+        p.text(initials, 190, 190);
     }
 };
 

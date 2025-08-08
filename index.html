@@ -11,38 +11,50 @@
 </head>
 <body>
     <div class="container">
-        <h1>Creative Abstract Avatar Generator</h1>
-        <p>Enter your name or username to generate a unique, abstract avatar.</p>
-        <input type="text" id="nameInput" placeholder="Enter your name...">
+        <div class="lang-switcher">
+            <button id="langSwitchBtn" type="button">中文 / English</button>
+        </div>
+        <h1 id="mainTitle" data-en="Creative Abstract Avatar Generator" data-zh="創意抽象頭像產生器">Creative Abstract Avatar Generator</h1>
+        <p id="descText" data-en="Enter your name or username to generate a unique, abstract avatar." data-zh="輸入您的名字或用戶名，產生獨一無二的抽象頭像。">Enter your name or username to generate a unique, abstract avatar.</p>
+        <input type="text" id="nameInput" placeholder="Enter your name..." data-en="Enter your name..." data-zh="請輸入您的名字...">
         <div id="avatarCanvasContainer" class="canvas-container"></div>
         <div class="controls">
             <div class="control-group">
-                <label for="styleSelector">Style:</label>
+                <label for="styleSelector" id="styleLabel" data-en="Style:" data-zh="風格：">Style:</label>
                 <select id="styleSelector">
-                    <option value="organic" selected>Organic</option>
-                    <option value="geometric">Geometric</option>
-                    <option value="cosmic">Cosmic</option>
-                    <option value="circuit">Circuit</option>
-                    <option value="burst">Burst</option>
-                    <option value="blueprint">Blueprint</option>
-                    <option value="strata">Strata</option>
-                    <option value="weave">Weave</option>
-                    <option value="minimalist">Minimalist</option>
-                    <option value="monogram">Monogram</option>
-                    <option value="gradientring">Gradient Ring</option>
-                    <option value="techgrid">Tech Grid</option>
-                    <option value="softshadow">Soft Shadow</option>
-                    <option value="abstractblocks">Abstract Blocks</option>
-                    <option value="signature">Signature</option>
+                    <option value="organic" selected data-en="Organic" data-zh="有機">Organic</option>
+                    <option value="geometric" data-en="Geometric" data-zh="幾何">Geometric</option>
+                    <option value="cosmic" data-en="Cosmic" data-zh="宇宙">Cosmic</option>
+                    <option value="circuit" data-en="Circuit" data-zh="電路">Circuit</option>
+                    <option value="burst" data-en="Burst" data-zh="爆發">Burst</option>
+                    <option value="blueprint" data-en="Blueprint" data-zh="藍圖">Blueprint</option>
+                    <option value="strata" data-en="Strata" data-zh="地層">Strata</option>
+                    <option value="weave" data-en="Weave" data-zh="編織">Weave</option>
+                    <option value="minimalist" data-en="Minimalist" data-zh="極簡">Minimalist</option>
+                    <option value="monogram" data-en="Monogram" data-zh="字母章">Monogram</option>
+                    <option value="gradientring" data-en="Gradient Ring" data-zh="漸層環">Gradient Ring</option>
+                    <option value="techgrid" data-en="Tech Grid" data-zh="科技網格">Tech Grid</option>
+                    <option value="softshadow" data-en="Soft Shadow" data-zh="柔影">Soft Shadow</option>
+                    <option value="abstractblocks" data-en="Abstract Blocks" data-zh="抽象色塊">Abstract Blocks</option>
+                    <option value="signature" data-en="Signature" data-zh="簽名">Signature</option>
                 </select>
             </div>
-            <button id="changePaletteBtn">Change Palette</button>
-            <label class="checkbox-label">
+            <button id="changePaletteBtn" data-en="Change Palette" data-zh="更換配色">Change Palette</button>
+            <label class="checkbox-label" id="initialsLabel" data-en="Include Initials" data-zh="包含首字母">
                 <input type="checkbox" id="includeInitials" >
                 Include Initials
             </label>
         </div>
-        <button id="downloadBtn">Download Avatar</button>
+        <div class="download-group">
+            <label for="downloadSize" id="downloadSizeLabel" data-en="Size:" data-zh="尺寸：">Size:</label>
+            <select id="downloadSize">
+                <option value="16">16x16</option>
+                <option value="32">32x32</option>
+                <option value="64">64x64</option>
+                <option value="256" selected>256x256</option>
+            </select>
+            <button id="downloadBtn" data-en="Download Avatar" data-zh="下載頭像">Download Avatar</button>
+        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <script src="script.js"></script>

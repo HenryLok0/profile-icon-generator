@@ -244,15 +244,24 @@ let sketch = function(p) {
         return seed;
     }
 
-    function downloadAvatar() {
-        const p5Canvas = document.querySelector('#avatarCanvasContainer canvas');
-        if (p5Canvas) {
-            const link = document.createElement('a');
-            link.download = `${nameInput.value || 'avatar'}-${styleSelector.value}-icon.png`;
-            link.href = p5Canvas.toDataURL('image/png');
-            link.click();
-        }
+function downloadAvatar() {
+    const p5Canvas = document.querySelector('#avatarCanvasContainer canvas');
+    const sizeSelect = document.getElementById('downloadSize');
+    const size = sizeSelect ? parseInt(sizeSelect.value) : 256;
+    if (p5Canvas) {
+        // 建立離屏 canvas 並重繪
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = size;
+        offCanvas.height = size;
+        const ctx = offCanvas.getContext('2d');
+        // 取得原 canvas 圖像並縮放
+        ctx.drawImage(p5Canvas, 0, 0, p5Canvas.width, p5Canvas.height, 0, 0, size, size);
+        const link = document.createElement('a');
+        link.download = `${nameInput.value || 'avatar'}-${styleSelector.value}-${size}x${size}.png`;
+        link.href = offCanvas.toDataURL('image/png');
+        link.click();
     }
+}
 
     function drawCircuit(p, palette) {
         // Circuit board style: lines and nodes
@@ -372,21 +381,26 @@ let sketch = function(p) {
     }
 
     function drawMinimalist(p, palette) {
-        // 極簡主義：柔和背景+簡單線條
+        // 極簡主義：柔和背景+簡單線條，根據名字隨機
         p.background(palette[3]);
+        let name = nameInput.value || 'A';
+        p.randomSeed(getSeed(name));
         p.noFill();
         p.stroke(palette[0]);
         p.strokeWeight(4);
-        // 幾條平行線
+        // 幾條平行線，位置隨名字變化
         for (let i = 1; i <= 3; i++) {
-            p.line(40 * i, 40, 40 * i, 160);
+            let x = p.random(30, 80) + i * p.random(30, 50);
+            let y1 = p.random(30, 60);
+            let y2 = p.random(120, 180);
+            p.line(x, y1, x, y2);
         }
-        // 幾個圓形色塊
+        // 幾個圓形色塊，位置與大小隨名字變化
         p.noStroke();
         p.fill(palette[1]);
-        p.ellipse(60, 60, 40, 40);
+        p.ellipse(p.random(40, 100), p.random(40, 100), p.random(30, 50), p.random(30, 50));
         p.fill(palette[2]);
-        p.ellipse(140, 140, 30, 30);
+        p.ellipse(p.random(120, 180), p.random(120, 180), p.random(20, 40), p.random(20, 40));
     }
 
     function drawMonogram(p, palette) {
@@ -410,13 +424,25 @@ let sketch = function(p) {
     }
 
     function drawGradientRing(p, palette) {
-        // 漸層圓環，現代感
+        // 漸層圓環，現代感，根據名字隨機
+        let name = nameInput.value || 'A';
+        p.randomSeed(getSeed(name));
         p.background(palette[3]);
         p.noFill();
-        for (let r = 80; r > 30; r -= 8) {
-            let c = p.lerpColor(p.color(palette[0]), p.color(palette[2]), (r-30)/50);
+        // 隨名字改變顏色、圓環數量、粗細
+        let colorA = p.color(palette[p.floor(p.random(palette.length))]);
+        let colorB = p.color(palette[p.floor(p.random(palette.length))]);
+        while (colorB.toString() === colorA.toString()) {
+            colorB = p.color(palette[p.floor(p.random(palette.length))]);
+        }
+        let ringCount = p.floor(p.random(5, 10));
+        let minR = p.random(30, 50);
+        let maxR = p.random(70, 100);
+        for (let i = 0; i < ringCount; i++) {
+            let r = p.map(i, 0, ringCount-1, maxR, minR);
+            let c = p.lerpColor(colorA, colorB, i/(ringCount-1));
             p.stroke(c);
-            p.strokeWeight(8);
+            p.strokeWeight(p.random(6, 12));
             p.ellipse(p.width/2, p.height/2, r*2, r*2);
         }
     }
@@ -441,15 +467,28 @@ let sketch = function(p) {
     }
 
     function drawSoftShadow(p, palette) {
-        // 柔和陰影
-        p.background(palette[2]);
+        // 柔和陰影，根據名字隨機
+        let name = nameInput.value || 'A';
+        p.randomSeed(getSeed(name));
+        p.background(palette[p.floor(p.random(palette.length))]);
         p.noStroke();
+        let centerX = p.random(100, 156);
+        let centerY = p.random(100, 156);
+        let baseR = p.random(60, 100);
+        // 多層柔影圓，顏色、位置、大小隨名字
         for (let i = 0; i < 3; i++) {
-            p.fill(palette[i], 80);
-            p.ellipse(128 + i*10, 128 + i*10, 120 - i*20, 120 - i*20);
+            let offsetX = p.random(-20, 20) + i * p.random(5, 15);
+            let offsetY = p.random(-20, 20) + i * p.random(5, 15);
+            let r = baseR - i * p.random(10, 25);
+            let c = p.color(palette[p.floor(p.random(palette.length))]);
+            c.setAlpha(80);
+            p.fill(c);
+            p.ellipse(centerX + offsetX, centerY + offsetY, r, r);
         }
-        p.fill(palette[0]);
-        p.ellipse(128, 128, 80, 80);
+        // 主圓
+        let mainC = p.color(palette[p.floor(p.random(palette.length))]);
+        p.fill(mainC);
+        p.ellipse(centerX, centerY, baseR * p.random(0.7, 1.1), baseR * p.random(0.7, 1.1));
     }
 
     function drawAbstractBlocks(p, palette) {
@@ -486,3 +525,43 @@ let sketch = function(p) {
 };
 
 new p5(sketch);
+
+// ===== 語言切換功能 =====
+document.addEventListener('DOMContentLoaded', function() {
+    const langSwitchBtn = document.getElementById('langSwitchBtn');
+    let currentLang = 'en'; // 預設英文
+
+    function setLang(lang) {
+        currentLang = lang;
+        // 標題
+        const mainTitle = document.getElementById('mainTitle');
+        if (mainTitle) mainTitle.textContent = mainTitle.dataset[lang];
+        // 說明
+        const descText = document.getElementById('descText');
+        if (descText) descText.textContent = descText.dataset[lang];
+        // 輸入框 placeholder
+        if (nameInput) nameInput.placeholder = nameInput.dataset[lang];
+        // Style 標籤
+        const styleLabel = document.getElementById('styleLabel');
+        if (styleLabel) styleLabel.textContent = styleLabel.dataset[lang];
+        // Style 選單
+        for (const opt of styleSelector.options) {
+            if (opt.dataset[lang]) opt.textContent = opt.dataset[lang];
+        }
+        // Palette 按鈕
+        if (changePaletteBtn) changePaletteBtn.textContent = changePaletteBtn.dataset[lang];
+        // Include Initials 標籤
+        const initialsLabel = document.getElementById('initialsLabel');
+        if (initialsLabel) initialsLabel.childNodes[1].textContent = initialsLabel.dataset[lang];
+        // Download 按鈕
+        if (downloadBtn) downloadBtn.textContent = downloadBtn.dataset[lang];
+    }
+
+    if (langSwitchBtn) {
+        langSwitchBtn.addEventListener('click', function() {
+            setLang(currentLang === 'en' ? 'zh' : 'en');
+        });
+    }
+    // 頁面載入時預設英文
+    setLang('en');
+});

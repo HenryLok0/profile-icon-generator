@@ -3,6 +3,7 @@ const downloadBtn = document.getElementById('downloadBtn');
 const changePaletteBtn = document.getElementById('changePaletteBtn');
 const includeInitialsCheckbox = document.getElementById('includeInitials');
 const styleSelector = document.getElementById('styleSelector');
+const mainColorPicker = document.getElementById('mainColorPicker');
 
 // Professional color palettes
 const palettes = [
@@ -16,13 +17,14 @@ const palettes = [
     ['#212121', '#424242', '#616161', '#9e9e9e', '#eeeeee']  // Weave palette
 ];
 let currentPaletteIndex = 0;
+let customMainColor = mainColorPicker ? mainColorPicker.value : null;
 
 let sketch = function(p) {
     p.setup = function() {
         let p5canvas = p.createCanvas(256, 256);
         p5canvas.parent('avatarCanvasContainer');
         p.noLoop();
-        
+
         // Event Listeners
         nameInput.addEventListener('input', () => p.redraw());
         changePaletteBtn.addEventListener('click', () => {
@@ -32,7 +34,13 @@ let sketch = function(p) {
         includeInitialsCheckbox.addEventListener('change', () => p.redraw());
         styleSelector.addEventListener('change', () => p.redraw());
         downloadBtn.addEventListener('click', downloadAvatar);
-        
+        if (mainColorPicker) {
+            mainColorPicker.addEventListener('input', () => {
+                customMainColor = mainColorPicker.value;
+                p.redraw();
+            });
+        }
+
         p.redraw(); // Initial draw
     };
 
@@ -42,7 +50,11 @@ let sketch = function(p) {
         p.randomSeed(seed);
 
         let currentStyle = styleSelector.value;
-        let palette = palettes[currentPaletteIndex];
+        let palette = palettes[currentPaletteIndex].slice();
+        // 如果有自訂主色，將 palette[0] 替換為主色
+        if (customMainColor) {
+            palette[0] = customMainColor;
+        }
 
         if (currentStyle === 'geometric') {
             drawGeometric(p, palette);

@@ -37,6 +37,21 @@
                     <option value="softshadow" data-en="Soft Shadow" data-zh="柔影">Soft Shadow</option>
                     <option value="abstractblocks" data-en="Abstract Blocks" data-zh="抽象色塊">Abstract Blocks</option>
                     <option value="signature" data-en="Signature" data-zh="簽名">Signature</option>
+                    <option value="pixelmosaic" data-en="Pixel Mosaic" data-zh="像素拼貼">Pixel Mosaic</option>
+                    <option value="crystal" data-en="Crystal" data-zh="水晶">Crystal</option>
+                    <option value="inksplash" data-en="Ink Splash" data-zh="墨滴">Ink Splash</option>
+                    <option value="papercut" data-en="Paper Cut" data-zh="紙雕">Paper Cut</option>
+                    <option value="wavegrid" data-en="Wave Grid" data-zh="波紋網格">Wave Grid</option>
+                    <option value="polygonalmesh" data-en="Polygonal Mesh" data-zh="多邊形網">Polygonal Mesh</option>
+                    <option value="retroneon" data-en="Retro Neon" data-zh="復古霓虹">Retro Neon</option>
+                    <option value="brushstroke" data-en="Brush Stroke" data-zh="筆觸">Brush Stroke</option>
+                    <option value="bubblepop" data-en="Bubble Pop" data-zh="泡泡">Bubble Pop</option>
+                    <option value="metallicfoil" data-en="Metallic Foil" data-zh="金屬箔">Metallic Foil</option>
+                    <option value="doodleline" data-en="Doodle Line" data-zh="塗鴉線">Doodle Line</option>
+                    <option value="gradientmesh" data-en="Gradient Mesh" data-zh="漸層網">Gradient Mesh</option>
+                    <option value="halftonedot" data-en="Halftone Dot" data-zh="網點">Halftone Dot</option>
+                    <option value="glitcheffect" data-en="Glitch Effect" data-zh="失真故障">Glitch Effect</option>
+                    <option value="natureleaf" data-en="Nature Leaf" data-zh="葉片">Nature Leaf</option>
                 </select>
             </div>
             <button id="changePaletteBtn" data-en="Change Palette" data-zh="更換配色">Change Palette</button>
@@ -46,6 +61,7 @@
                 <input type="checkbox" id="includeInitials" >
                 Include Initials
             </label>
+            <button id="showDemoBtn" class="secondary-btn" type="button" data-en="Show All Styles" data-zh="顯示所有風格">Show All Styles</button>
         </div>
         <div class="download-group">
             <label for="downloadSize" id="downloadSizeLabel" data-en="Size:" data-zh="尺寸：">Size:</label>
@@ -56,6 +72,16 @@
                 <option value="256" selected>256x256</option>
             </select>
             <button id="downloadBtn" data-en="Download Avatar" data-zh="下載頭像">Download Avatar</button>
+        </div>
+
+        <!-- Demo Gallery Section -->
+        <div id="demoSection" class="demo-section" style="display:none;">
+            <div class="demo-header">
+                <h2 id="demoTitle" data-en="All Styles Preview" data-zh="所有風格預覽">All Styles Preview</h2>
+                <button id="closeDemoBtn" class="secondary-btn" type="button" data-en="Close" data-zh="關閉">Close</button>
+            </div>
+            <p id="demoHint" class="demo-hint" data-en="Previews use your current name and palette." data-zh="預覽使用您目前的名字與配色。">Previews use your current name and palette.</p>
+            <div id="demoGrid" class="demo-grid"></div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
